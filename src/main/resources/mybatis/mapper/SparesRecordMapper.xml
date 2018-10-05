@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.leeder.demo.dao.SparesRecord">
+	<insert id="insertData"
+		parameterType="com.leeder.demo.domain.SparesRecordBean"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO dev_spares_record
+		    ( spares_id 
+           , note 
+           , r_type  
+           , num 
+           , record_date 
+           , status 
+           , create_time 
+           ,name  )
+		VALUES
+		<foreach collection="list" item="me" separator=",">
+
+			(#{me.sparesId}
+			,#{me.note}
+			,#{me.rType}
+			,#{me.num}
+			,#{me.recordDate}
+			,#{me.status}
+			,#{me.createTime}
+			,#{me.name})
+
+		</foreach>
+	</insert>
+	
+	<select id="getTestData"  resultType="com.leeder.demo.domain.HistogramVO">
+	SELECT 
+      name
+      ,sum(num)  as num
+  FROM   dev_spares_record
+  group by name order by sum(num) desc
+	</select>
+
+	<select id="getDataByYear"  resultType="com.leeder.demo.domain.MultiLineVO">
+	SELECT 
+      name,
+      DATEPART(year,record_date) as year,
+      SUM(num) as num
+  FROM dev_spares_record
+  
+  group by DATEPART(year,record_date),name
+  
+  order by year
+  
+	
+	</select>
+
+
+</mapper>

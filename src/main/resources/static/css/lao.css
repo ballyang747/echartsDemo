@@ -1,0 +1,70 @@
+.main {
+			background-color: #F2F2F2;
+		}
+		
+		.thcolor {
+			background-color: #2C7DCE;
+			font
+		}
+		
+		.blue_btn {
+			width: 80px;
+			height: 30px;
+			background-color: #2c7dce;
+			color: #fff;
+			border: 0px;
+			border-radius: 20px;
+			box-shadow: 4px 4px 2px #cee1f8;
+		}
+		.white_btn {
+			width: 80px;
+			height: 30px;
+			background-color: #F3F7FD;
+			color: #2C7DCE;
+			border: 1px solid #8E9DBA;
+			border-radius: 20px;
+			box-shadow: 4px 4px 2px #cee1f8;
+		}
+	/*根据bootstrap修改*/
+	.formstyle {
+  display: block;
+  width: 90%;
+  /*height: 34px;*/
+  padding: 6px 12px;
+ /* font-size: 14px;*/
+ /* line-height: 1.42857143;*/
+  color: #555;
+  background-color: #fff;
+
+  border: 1px solid #8E9DBA;
+  border-radius: 3px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+       -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+		
+
+.button_position{
+	
+	 position:relative; bottom: 35px;
+	 
+}
+
+	.banner {
+			padding-top: 10px;
+		}
+		
+		.title3 {
+			font-family: 'Arial Normal', 'Arial';
+			font-weight: bold;
+			font-style: normal;
+			font-size: 18px;
+			text-align: left;
+		}
+	     .button_down{
+	     	margin-top: 30px; 
+	     	
+	     }
