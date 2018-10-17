@@ -18,6 +18,7 @@ import com.leeder.demo.dao.SparesRecord;
 import com.leeder.demo.domain.HistogramVO;
 import com.leeder.demo.domain.MultiLineVO;
 import com.leeder.demo.domain.SparesRecordBean;
+import com.leeder.demo.domain.UpdateVo;
 import com.leeder.demo.utils.RandomData;
 
 @RunWith(SpringRunner.class)
@@ -29,6 +30,8 @@ public class DemoApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
+	
+	//自动随机生成1000条数据
 	@Test
 	public void inserTest() throws ParseException {
 		
@@ -83,9 +86,20 @@ public class DemoApplicationTests {
 	
 	@Test
 	public void getTest2() {
-	List<MultiLineVO> dataByYear = sparesRecord.getDataByYear();
+	List<MultiLineVO> dataByYear = sparesRecord.getDataByName();
 		
 		for (MultiLineVO sparesRecord : dataByYear) {
+			System.out.println(sparesRecord);
+		}
+		
+	}
+	
+	
+	@Test
+	public void getTest3() {
+		List<UpdateVo> dataByDays = sparesRecord.getDataByDay();
+		
+		for (UpdateVo sparesRecord : dataByDays) {
 			System.out.println(sparesRecord);
 		}
 		

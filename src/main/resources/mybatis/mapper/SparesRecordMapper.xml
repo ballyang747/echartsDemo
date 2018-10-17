@@ -7,14 +7,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		parameterType="com.leeder.demo.domain.SparesRecordBean"
 		useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO dev_spares_record
-		    ( spares_id 
-           , note 
-           , r_type  
-           , num 
-           , record_date 
-           , status 
-           , create_time 
-           ,name  )
+		( spares_id
+		, note
+		, r_type
+		, num
+		, record_date
+		, status
+		, create_time
+		,name )
 		VALUES
 		<foreach collection="list" item="me" separator=",">
 
@@ -29,27 +29,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 		</foreach>
 	</insert>
-	
-	<select id="getTestData"  resultType="com.leeder.demo.domain.HistogramVO">
-	SELECT 
-      name
-      ,sum(num)  as num
-  FROM   dev_spares_record
-  group by name order by sum(num) desc
+
+	<select id="getTestData"
+		resultType="com.leeder.demo.domain.HistogramVO">
+		SELECT
+		name
+		,sum(num) as num
+		FROM dev_spares_record
+		group by name order by sum(num) desc
 	</select>
 
-	<select id="getDataByYear"  resultType="com.leeder.demo.domain.MultiLineVO">
-	SELECT 
-      name,
-      DATEPART(year,record_date) as year,
-      SUM(num) as num
-  FROM dev_spares_record
-  
-  group by DATEPART(year,record_date),name
-  
-  order by year
-  
-	
+	<select id="getDataByName"
+		resultType="com.leeder.demo.domain.MultiLineVO">
+		SELECT
+		name,
+		DATEPART(year,record_date) as year,
+		SUM(num) as num
+		FROM dev_spares_record
+		group by DATEPART(year,record_date),name
+		order by name
+
+
+	</select>
+
+	<select id="getDataByDay"
+		resultType="com.leeder.demo.domain.UpdateVo">
+		SELECT
+		num
+		,record_date as recordDate
+		FROM dev_spares_record
+		order by record_date
 	</select>
 
 

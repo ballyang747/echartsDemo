@@ -5,6 +5,7 @@ import java.util.List;
 import com.leeder.demo.domain.HistogramVO;
 import com.leeder.demo.domain.MultiLineVO;
 import com.leeder.demo.domain.SparesRecordBean;
+import com.leeder.demo.domain.UpdateVo;
 
 public interface SparesRecord {
 	
@@ -12,6 +13,8 @@ public interface SparesRecord {
 	 
 	 List<HistogramVO> getTestData();
 	 
-	 List<MultiLineVO> getDataByYear();
+	 List<MultiLineVO> getDataByName();
+	 
+	 List<UpdateVo>  getDataByDay();
 
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.leeder.demo.domain.HistogramVO;
 import com.leeder.demo.domain.MultiLineVO;
+import com.leeder.demo.domain.UpdateVo;
 import com.leeder.demo.service.AppTest;
 
 @Controller
@@ -37,6 +38,14 @@ public class AppController {
 		
 		
 		return appTest.getDataByYear();
+	}
+	
+	@ResponseBody
+	 @RequestMapping(value="/test3",produces= {"application/json;charset=utf-8"})
+	public  List<UpdateVo> getTestData3() {
+		
+		
+		return appTest.getDataByDays();
 	}
 	
 	

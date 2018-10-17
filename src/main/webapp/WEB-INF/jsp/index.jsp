@@ -129,10 +129,39 @@ $(function(){
 					 var data = text;
 					    var xA = [];
 					    var yA = [];
-					    
+					    var years=[];
+					    var datas=[];
+					    var series=[];
 					    $.each(data,function(i,val){
 					    	 xA.push(i);
-						 });					 
+					    	 yA.push(val)
+						 });			
+					    console.log(yA);
+					    $.each(yA,function(i,value){
+					    	var temp = [];
+					    	var temp2=[];
+					    	var nums= value
+						    $.each(nums,function(i,val){
+						    	temp.push(val.num);
+						    	temp2.push(val.year);
+							 }); 
+					    	years.push(temp2);
+					    	datas.push(temp);
+						 });
+					    //xA and datas 
+					    //years[1]
+					    
+					    for(var i= 0;i<datas.length;i++){
+					    	　　series.push({
+					    	　　　　name:xA[i],
+					    	　　　　 type: 'bar',
+						                  label: labelOption,
+						                 data: datas[i]
+					    	　　})
+					    	}
+			
+					     console.log(years[1]);
+					    console.log(datas);
 					 var myChart = echarts.init(document.getElementById('test2'));
 					 var posList = [
 						    'left', 'right', 'top', 'bottom',
@@ -230,7 +259,7 @@ $(function(){
 						        }
 						    },
 						    legend: {
-						        data: ['Forest', 'Steppe', 'Desert', 'Wetland']
+						        data: xA
 						    },
 						 /*    toolbox: {
 						        show: true,
@@ -250,7 +279,7 @@ $(function(){
 						        {
 						            type: 'category',
 						            axisTick: {show: false},
-						            data: xA
+						            data: years[1]
 						        }
 						    ],
 						    yAxis: [
@@ -258,37 +287,79 @@ $(function(){
 						            type: 'value'
 						        }
 						    ],
-						    series: [
-						        {
-						            name: 'Forest',
-						            type: 'bar',
-						            barGap: 0,
-						            label: labelOption,
-						            data: [320, 332, 301, 334, 390]
-						        },
-						        {
-						            name: 'Steppe',
-						            type: 'bar',
-						            label: labelOption,
-						            data: [220, 182, 191, 234, 290]
-						        },
-						        {
-						            name: 'Desert',
-						            type: 'bar',
-						            label: labelOption,
-						            data: [150, 232, 201, 154, 190]
-						        },
-						        {
-						            name: 'Wetland',
-						            type: 'bar',
-						            label: labelOption,
-						            data: [98, 77, 101, 99, 40]
-						        }
-						    ]
+						    series:series
 						};
 					 
 					 
 					 
+
+					 myChart.setOption(option);
+				 },error:function(){
+			    	alert("提示信息");
+			    	}
+			 });                    
+			 
+			 
+		 });
+	
+	 $("#update").click(function(){
+			
+		 $.ajax({
+			 type:"post",
+				url:"${ctx}/test3",
+		        datatype:"json",
+				 success:function(text){
+					 var data = text;
+					    var xA = [];
+					    var yA = [];
+					    
+					    $.each(data,function(i,val){
+					    	 xA.push(val.recordDate);
+						        yA.push(val.num);
+						 });					
+					    
+					  
+					 
+					 
+
+					 var myChart = echarts.init(document.getElementById('test3'));
+					 var option = {
+					     xAxis: {
+					         type: 'category',
+					         boundaryGap: false,
+					         data: xA
+					     },
+					     yAxis: {
+					         boundaryGap: [0, '50%'],
+					         type: 'value'
+					     },
+					     series: [
+					         {
+					             name:'备件出库数量',
+					             type:'line',
+					             smooth:true,
+					             symbol: 'none',
+					             stack: 'a',
+					             areaStyle: {
+					                 normal: {}
+					             },
+					             data: yA
+					         }
+					     ]
+					 };
+
+					 setInterval(function () {
+					    
+					     myChart.setOption({
+					         xAxis: {
+					             data: xA
+					         },
+					         series: [{
+					             name:'出库数量',
+					             data: yA
+					         }]
+					     });
+					 }, 500);
 
 					 myChart.setOption(option);
 				 },error:function(){
@@ -314,6 +385,7 @@ $(function(){
  <button value="test"  id="zhuzi"> 柱状图</button>
   <button value="test"  id="pie"> 饼图</button>
    <button value="test"  id="multi"> 多状态图</button>
+      <button value="test"  id="update"> 更新图</button>
  <div id="test" style="width: 600px;height:400px;">
 
  </div>
@@ -321,6 +393,9 @@ $(function(){
 
  </div>
    <div id="test2" style="width: 600px;height:400px;" style="float: left;">
+
+ </div>
+    <div id="test3" style="width: 600px;height:400px;" style="float: left;">
 
  </div>
 </body>

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.leeder.demo.dao.SparesRecord;
 import com.leeder.demo.domain.HistogramVO;
 import com.leeder.demo.domain.MultiLineVO;
+import com.leeder.demo.domain.UpdateVo;
 import com.leeder.demo.service.AppTest;
 @Service
 public class AppTestImpl implements AppTest {
@@ -26,14 +27,14 @@ public class AppTestImpl implements AppTest {
 
 	@Override
 	public Map<String, List<MultiLineVO>> getDataByYear() {
-		List<MultiLineVO> dataByYear = sparesRecord.getDataByYear();
+		List<MultiLineVO> dataByYear = sparesRecord.getDataByName();
 		Map<String, List<MultiLineVO>> data =new HashMap<>();
 		 List<MultiLineVO> datas = new ArrayList<>();
 		for (MultiLineVO multiLineVO : dataByYear) {
-			String year = multiLineVO.getYear();
-			if(!data.containsKey(year)) {
+			String name = multiLineVO.getName();
+			if(!data.containsKey(name)) {
 				datas = new ArrayList<>();
-				data.put(year, datas);
+				data.put(name, datas);
 			}
 			
 			datas.add(multiLineVO);
@@ -41,6 +42,12 @@ public class AppTestImpl implements AppTest {
 		
 		
 		return data;
+	}
+
+	@Override
+	public List<UpdateVo> getDataByDays() {
+		
+		return sparesRecord.getDataByDay();
 	}
 
 }
