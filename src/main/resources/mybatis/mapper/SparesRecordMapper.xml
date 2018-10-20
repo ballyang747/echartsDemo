@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="insertData"
 		parameterType="com.leeder.demo.domain.SparesRecordBean"
 		useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO dev_spares_record
+		INSERT INTO testTable2
 		( spares_id
 		, note
 		, r_type
@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT
 		name
 		,sum(num) as num
-		FROM dev_spares_record
+		FROM  testTable2
 		group by name order by sum(num) desc
 	</select>
 
@@ -45,7 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		name,
 		DATEPART(year,record_date) as year,
 		SUM(num) as num
-		FROM dev_spares_record
+		FROM testTable2
 		group by DATEPART(year,record_date),name
 		order by name
 
@@ -57,7 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT
 		num
 		,record_date as recordDate
-		FROM dev_spares_record
+		FROM   testTable2
 		order by record_date
 	</select>
 

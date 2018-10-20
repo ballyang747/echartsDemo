@@ -6,12 +6,76 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css" />
-<script type="text/javascript" src="${pageContext.request.contextPath}/jquery/jquery-3.3.1.min.js"></script>
+
 <script type="text/javascript" src="${pageContext.request.contextPath}/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/echarts.min.js"></script>
+
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/china.js"></script>
 <script type="text/javascript">
+
+function mixKey(key, values){
+	var temp=[];
+	temp.push(key);
+	for(var i=0;i<values.length;i++){
+		temp.push(values[i]) 
+	}
+	return temp;
+}
+
+
+
 $(function(){
+	$("#map").click(function(){
+		 var myChart = echarts.init(document.getElementById('test5'));
+         var option = {
+             tooltip: {
+//                 show: false //不显示提示标签
+                 formatter: '{b}', //提示标签格式
+                 backgroundColor:"#ff7f50",//提示标签背景颜色
+                 textStyle:{color:"#fff"} //提示标签字体颜色
+             },
+             series: [{
+                 type: 'map',
+                 mapType: 'china',
+                 label: {
+                     normal: {
+                         show: true,//显示省份标签
+                         textStyle:{color:"#c71585"}//省份标签字体颜色
+                     },    
+                     emphasis: {//对应的鼠标悬浮效果
+                         show: true,
+                         textStyle:{color:"#800080"}
+                     } 
+                 },
+                 itemStyle: {
+                     normal: {
+                         borderWidth: .5,//区域边框宽度
+                         borderColor: '#009fe8',//区域边框颜色
+                         areaColor:"#ffefd5",//区域颜色
+                     },
+                     emphasis: {
+                         borderWidth: .5,
+                         borderColor: '#4b0082',
+                         areaColor:"#ffdead",
+                     }
+                 },
+                 data:[
+                     {name:'福建', selected:true}//福建为选中状态
+                 ]
+             }],
+         };
+         
+         myChart.setOption(option);
+         myChart.on('mouseover', function (params) {
+             var dataIndex = params.dataIndex;
+             console.log(params);
+         });
+		
+	});
+	
+	
+	
+	
 	 $("#zhuzi").click(function(){
 	
 		 $.ajax({
@@ -309,25 +373,45 @@ $(function(){
 				url:"${ctx}/test3",
 		        datatype:"json",
 				 success:function(text){
-					 var data = text;
+					 var datas = text;
 					    var xA = [];
 					    var yA = [];
-					    
-					    $.each(data,function(i,val){
+					    var data=[]; 
+					    var xData=[];
+					    var yData=[];
+					    $.each(datas,function(i,val){
 					    	 xA.push(val.recordDate);
 						        yA.push(val.num);
 						 });					
 					    
-					  
+					    console.log(xA);
+					    console.log(yA);
+					    var now =  xA[0];
+					    
+					    for (var i = 0; i < 100; i++) {
+					    	xData.push(xA[i]);
+					    	yData.push(yA[i]);
+					    }
+					    
+					    console.log(data);
+					    var temp = 100;
+					    function addData(shift){
+					    	xData.shift();
+					    	yData.shift();
+					    	xData.push(xA[temp]);
+					    	yData.push(yA[temp]);
+					    	temp ++;
+					    }
 					 
 					 
 
+	
 					 var myChart = echarts.init(document.getElementById('test3'));
 					 var option = {
 					     xAxis: {
 					         type: 'category',
 					         boundaryGap: false,
-					         data: xA
+					         data: xData
 					     },
 					     yAxis: {
 					         boundaryGap: [0, '50%'],
@@ -343,24 +427,22 @@ $(function(){
 					             areaStyle: {
 					                 normal: {}
 					             },
-					             data: yA
+					             data: yData
 					         }
 					     ]
 					 };
-
 					 setInterval(function () {
-					    
+						 addData(true);
 					     myChart.setOption({
 					         xAxis: {
-					             data: xA
+					             data: xData
 					         },
 					         series: [{
 					             name:'出库数量',
-					             data: yA
+					             data: yData
 					         }]
 					     });
 					 }, 500);
-
 					 myChart.setOption(option);
 				 },error:function(){
 			    	alert("提示信息");
@@ -369,7 +451,123 @@ $(function(){
 			 
 			 
 		 });
-	 
+	 $("#multi2").click(function(){ 
+		 var year = [];
+		
+		 var xYear=[];
+		 
+		 $.ajax({
+			 type:"post",
+				url:"${ctx}/test2",
+		        datatype:"json",
+				 success:function(text){
+					 var data = text;
+					    var xA = [];//第一列
+					    var cat=[];
+					    var yA = [];
+					    var years=[];
+					    var datas=[];
+					   var series =[];
+					    $.each(data,function(i,val){
+					    	 xA.push(i);
+					    	 yA.push(val)
+						 });
+					    var year = mixKey("年份",xA);
+				
+					    $.each(yA,function(i,value){
+					    	var temp = [];
+					    	var temp2=[];
+					    	var nums= value
+						    $.each(nums,function(i,val){
+						    	temp.push(val.num);
+						    	temp2.push(val.year);
+							 }); 
+					    	years.push(temp2);
+					    	datas.push(temp);
+						 });
+					    
+					    year = mixKey("year",years[1]);
+					    xYear=years[1];
+					    console.log(year);
+					    
+			   for(var i= 0;i<datas.length;i++){
+				   series.push(mixKey(xA[i],datas[i]))
+			   } 
+			   dataz = mixKey(year,series);
+			   console.log(dataz);
+				 setTimeout(function () {
+					  
+					 var myChart = echarts.init(document.getElementById('test4'));
+					    option = {
+					        legend: {},
+					        tooltip: {
+					            trigger: 'axis',
+					            showContent: false
+					        },
+					        dataset: {
+					        	
+					            source: dataz
+
+					        },
+					        xAxis: {type: 'category'},
+					        yAxis: {gridIndex: 0},
+					        grid: {top: '55%'},
+					        series: [
+					            {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+					            {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+					            {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+					            {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+					            {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+					            {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+					            {
+					                type: 'pie',
+					                id: 'pie',
+					                radius: '30%',
+					                center: ['50%', '25%'],
+					                label: {
+					                    formatter: '{b}: {@'+xYear[0]+'} ({d}%)'
+					                },
+					                encode: {
+					                    itemName: 'year',
+					                    value: xYear[0],
+					                    tooltip: xYear[0]
+					                }
+					            }
+					        ]
+					    };
+
+					    myChart.on('updateAxisPointer', function (event) {
+					        var xAxisInfo = event.axesInfo[0];
+					        if (xAxisInfo) {
+					            var dimension = xAxisInfo.value + 1;
+					            myChart.setOption({
+					                series: {
+					                    id: 'pie',
+					                    label: {
+					                        formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+					                    },
+					                    encode: {
+					                        value: dimension,
+					                        tooltip: dimension
+					                    }
+					                }
+					            });
+					        }
+					    });
+
+					    myChart.setOption(option);
+
+					});
+			
+				
+				 },error:function(){
+			    	alert("提示信息");
+			    	}
+			 });  
+		 
+
+		 
+	 });
 	 
 	 
 });
@@ -386,6 +584,8 @@ $(function(){
   <button value="test"  id="pie"> 饼图</button>
    <button value="test"  id="multi"> 多状态图</button>
       <button value="test"  id="update"> 更新图</button>
+      <button value="test"  id="multi2"> 多状态图2</button>
+          <button value="test"  id="map"> 地图</button>
  <div id="test" style="width: 600px;height:400px;">
 
  </div>
@@ -396,6 +596,12 @@ $(function(){
 
  </div>
     <div id="test3" style="width: 600px;height:400px;" style="float: left;">
+
+ </div>
+ <div id="test4" style="width: 600px;height:400px;" style="float: left;">
+
+ </div>
+ <div id="test5" style="width: 600px;height:400px;" style="float: left;">
 
  </div>
 </body>
